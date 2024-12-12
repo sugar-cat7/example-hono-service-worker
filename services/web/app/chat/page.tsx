@@ -10,16 +10,27 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function Component() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: 'http://localhost:8787/stream',
+    api: '/sw/chat',
   })
   const [isTyping, setIsTyping] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js", { scope: "/", type: "module" })
+        .then(
+          function (_registration) {
+            console.log("Register Service Worker: Success");
+          },
+          function (_error) {
+            console.log("Register Service Worker: Error");
+          }
+        );
+    }
+  }, []);
 
   useEffect(() => {
     if (messages.length > 0 && messages[messages.length - 1].role === 'assistant') {

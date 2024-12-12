@@ -8,15 +8,15 @@ export const runtime = 'edge'
 
 const openai = createOpenAI({
   compatibility: 'strict',
-  organization: process.env.OPENAI_ORG,
-  project: process.env.OPENAI_PROJECT,
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL,
+  organization: "xxx",
+  project: "xxx",
+  apiKey: "xxx",
+  baseURL: "xxx",
 })
 
 const app = new Hono().basePath('/api')
 
-app.post('/stream', async (c) => {
+app.post('/chat', async (c) => {
   const r = await c.req.json()
   return stream(c, async (stream) => {
     const result = await streamText({
